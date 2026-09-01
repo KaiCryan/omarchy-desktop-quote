@@ -38,6 +38,7 @@ Item {
   property string quoteText: ""
   property string quoteAttr: ""
   property string lastWallpaper: ""
+  property double lastRollAt: 0
 
   function applyConfig(raw) {
     try {
@@ -83,6 +84,10 @@ Item {
       idx = (idx + 1) % quotes.length
     quoteText = quotes[idx].text
     quoteAttr = quotes[idx].attr
+    lastRollAt = Date.now()
+    // Re-read the wallpaper now so the sync poll doesn't roll again right after
+    // (e.g. a keybind that cycles the wallpaper and calls `next` together).
+    wpProbe.running = true
   }
 
   FileView {
@@ -128,7 +133,9 @@ Item {
         if (root.lastWallpaper === "") { root.lastWallpaper = wp; return }
         if (wp !== root.lastWallpaper) {
           root.lastWallpaper = wp
-          if (root.syncWithWallpaper) root.roll()
+          // Skip if the quote was just rolled explicitly (e.g. a keybind that
+          // changes wallpaper and calls `next` together) — avoids a double flip.
+          if (root.syncWithWallpaper && Date.now() - root.lastRollAt > 3000) root.roll()
         }
       }
     }

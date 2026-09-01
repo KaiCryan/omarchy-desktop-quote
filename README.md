@@ -80,8 +80,19 @@ omarchy-shell -q desktopQuote show
 Bind one in `~/.config/hypr/bindings.lua`, e.g.:
 
 ```lua
-o.bind("SUPER SHIFT", "Q", "exec", "omarchy-shell -q desktopQuote next")
+o.bind("SUPER + SHIFT + Q", "New desktop quote", "omarchy-shell -q desktopQuote next")
 ```
+
+Pair it with wallpaper cycling so both step together:
+
+```lua
+o.bind("SUPER + Next", "Next wallpaper + quote",
+  "omarchy theme bg next ; omarchy-shell -q desktopQuote next")
+```
+
+With `syncWithWallpaper` on (the default) the quote would follow the wallpaper on
+its own within a second or two; calling `next` in the same binding just makes it
+instant. The plugin de-bounces so it only changes once.
 
 ## Notes
 
