@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -17,7 +18,9 @@ Item {
   property string quotesPath: home + "/.config/omarchy/quotes.txt"
   property int rotateMinutes: 20
   property bool syncWithWallpaper: true
-  property string corner: "bottom-left"   // bottom-left | bottom-right | top-left | top-right
+  // <vertical>-<horizontal>: vertical = top | middle | bottom,
+  // horizontal = left | center | right  (e.g. "middle-right", "top-center")
+  property string position: "bottom-left"
   property int marginX: 96
   property int marginY: 84
   property int maxWidth: 720
@@ -25,6 +28,10 @@ Item {
   property string layerName: "bottom"     // bottom (desktop) | top (over windows)
   property real dim: 0.92                  // 0..1 overall opacity
   property bool shown: true
+
+  readonly property var _pos: String(position || "bottom-left").toLowerCase().split("-")
+  readonly property string vAlign: ["top", "middle", "bottom"].indexOf(_pos[0]) !== -1 ? _pos[0] : "bottom"
+  readonly property string hAlign: ["left", "center", "right"].indexOf(_pos[1]) !== -1 ? _pos[1] : "left"
 
   // ---- state ----------------------------------------------------------------
   property var quotes: []
@@ -38,7 +45,8 @@ Item {
       if (c.quotesPath) quotesPath = String(c.quotesPath).replace(/^~/, home)
       if (c.rotateMinutes !== undefined) rotateMinutes = c.rotateMinutes
       if (c.syncWithWallpaper !== undefined) syncWithWallpaper = c.syncWithWallpaper
-      if (c.corner) corner = c.corner
+      if (c.position) position = c.position
+      else if (c.corner) position = c.corner   // back-compat alias
       if (c.marginX !== undefined) marginX = c.marginX
       if (c.marginY !== undefined) marginY = c.marginY
       if (c.maxWidth !== undefined) maxWidth = c.maxWidth
@@ -151,24 +159,10 @@ Item {
       color: "transparent"
       exclusionMode: ExclusionMode.Ignore
 
-      readonly property bool bottomEdge: root.corner.indexOf("bottom") === 0
-      readonly property bool leftEdge: root.corner.indexOf("left") !== -1
-
-      anchors {
-        top: !bottomEdge
-        bottom: bottomEdge
-        left: leftEdge
-        right: !leftEdge
-      }
-      margins {
-        top: bottomEdge ? 0 : root.marginY
-        bottom: bottomEdge ? root.marginY : 0
-        left: leftEdge ? root.marginX : 0
-        right: leftEdge ? 0 : root.marginX
-      }
-
-      implicitWidth: root.maxWidth + 40
-      implicitHeight: Math.max(1, placard.implicitHeight)
+      // Cover the whole output and place the placard inside; a full-screen
+      // surface makes every vertical/horizontal alignment trivial.
+      anchors { top: true; bottom: true; left: true; right: true }
+      mask: Region {}   // never intercept pointer events
 
       WlrLayershell.namespace: "desktop-quote"
       WlrLayershell.layer: root.layerName === "top" ? WlrLayer.Top : WlrLayer.Bottom
@@ -176,17 +170,37 @@ Item {
 
       Row {
         id: placard
-        spacing: 15
-        layoutDirection: win.leftEdge ? Qt.LeftToRight : Qt.RightToLeft
-        anchors.left: win.leftEdge ? parent.left : undefined
-        anchors.right: win.leftEdge ? undefined : parent.right
-        anchors.verticalCenter: parent.verticalCenter
+        spacing: Math.round(18 * root.fontScale)
+        layoutDirection: root.hAlign === "right" ? Qt.RightToLeft : Qt.LeftToRight
+
+        anchors.left: root.hAlign === "left" ? parent.left : undefined
+        anchors.leftMargin: root.marginX
+        anchors.right: root.hAlign === "right" ? parent.right : undefined
+        anchors.rightMargin: root.marginX
+        anchors.horizontalCenter: root.hAlign === "center" ? parent.horizontalCenter : undefined
+
+        anchors.top: root.vAlign === "top" ? parent.top : undefined
+        anchors.topMargin: root.marginY
+        anchors.bottom: root.vAlign === "bottom" ? parent.bottom : undefined
+        anchors.bottomMargin: root.marginY
+        anchors.verticalCenter: root.vAlign === "middle" ? parent.verticalCenter : undefined
 
         opacity: (root.shown && root.quoteText ? 1 : 0) * root.dim
         Behavior on opacity { NumberAnimation { duration: 500; easing.type: Easing.InOutQuad } }
 
+        // Soft shadow so the text stays legible over any wallpaper.
+        layer.enabled: true
+        layer.effect: MultiEffect {
+          shadowEnabled: true
+          shadowColor: "#000000"
+          shadowBlur: 0.5
+          shadowOpacity: 0.55
+          shadowVerticalOffset: 1
+          blurMax: 24
+        }
+
         Rectangle {
-          width: 3
+          width: Math.max(2, Math.round(3 * root.fontScale))
           height: col.implicitHeight
           anchors.verticalCenter: parent.verticalCenter
           color: Color.accent
@@ -195,16 +209,17 @@ Item {
 
         Column {
           id: col
-          spacing: 6
+          spacing: Math.round(8 * root.fontScale)
 
           Text {
             width: root.maxWidth
-            horizontalAlignment: win.leftEdge ? Text.AlignLeft : Text.AlignRight
+            horizontalAlignment: root.hAlign === "right" ? Text.AlignRight
+              : root.hAlign === "center" ? Text.AlignHCenter : Text.AlignLeft
             text: root.quoteText
             wrapMode: Text.WordWrap
             color: Color.foreground
             font.family: Style.font.family
-            font.pixelSize: Math.round(18 * root.fontScale)
+            font.pixelSize: Math.round(22 * root.fontScale)
             font.weight: Font.Light
             style: Text.Outline
             styleColor: Qt.rgba(0, 0, 0, 0.5)
@@ -213,11 +228,12 @@ Item {
           Text {
             visible: root.quoteAttr.length > 0
             width: root.maxWidth
-            horizontalAlignment: win.leftEdge ? Text.AlignLeft : Text.AlignRight
+            horizontalAlignment: root.hAlign === "right" ? Text.AlignRight
+              : root.hAlign === "center" ? Text.AlignHCenter : Text.AlignLeft
             text: "— " + root.quoteAttr.toUpperCase()
             color: Color.accent
             font.family: Style.font.family
-            font.pixelSize: Math.round(10 * root.fontScale)
+            font.pixelSize: Math.round(11 * root.fontScale)
             font.letterSpacing: 2
             style: Text.Outline
             styleColor: Qt.rgba(0, 0, 0, 0.45)
