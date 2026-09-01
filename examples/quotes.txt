@@ -1,0 +1,15 @@
+# Example quotes file. Copy to ~/.config/omarchy/quotes.txt and make it yours.
+#
+# Format:  quote text | Attribution      (the "| Attribution" part is optional)
+# Lines starting with # and blank lines are ignored. Hot-reloads on save.
+
+Simplicity is the ultimate sophistication. | Leonardo da Vinci
+The only way to do great work is to love what you do. | Steve Jobs
+We are what we repeatedly do. Excellence, then, is not an act, but a habit. | Will Durant
+It is not that we have a short time to live, but that we waste a lot of it. | Seneca
+The impediment to action advances action. What stands in the way becomes the way. | Marcus Aurelius
+Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away. | Antoine de Saint-Exupery
+Everything should be made as simple as possible, but not simpler. | Albert Einstein
+The best way to predict the future is to invent it. | Alan Kay
+Talk is cheap. Show me the code. | Linus Torvalds
+Premature optimization is the root of all evil. | Donald Knuth

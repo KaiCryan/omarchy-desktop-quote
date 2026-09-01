@@ -1,0 +1,12 @@
+{
+  "quotesPath": "~/.config/omarchy/quotes.txt",
+  "rotateMinutes": 20,
+  "syncWithWallpaper": true,
+  "corner": "bottom-left",
+  "marginX": 96,
+  "marginY": 84,
+  "maxWidth": 720,
+  "fontScale": 1.0,
+  "layer": "bottom",
+  "dim": 0.92
+}

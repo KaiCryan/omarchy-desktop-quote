@@ -1,0 +1,22 @@
+# Bundled fallback quotes for the Desktop Quote plugin.
+#
+# This file is only used when ~/.config/omarchy/quotes.txt does not exist.
+# To use your own, create that file with the same format:
+#
+#     quote text | Attribution        (attribution is optional)
+#     # lines starting with a hash, and blank lines, are ignored
+#
+# It hot-reloads on save.
+
+The work is mysterious and important.
+Please try to enjoy each file equally. | Lumon Industries
+A handshake is available upon request. | Seth Milchick
+The remembered man does not decay. | Kier Eagan
+Keep a merry humor ever in your heart. | Kier Eagan
+Let's grow the box. | Macrodata Refinement
+The light of discovery shines truer upon a virgin meadow than a beaten path. | Kier Eagan
+The surest way to tame a prisoner is to let him believe he's free. | Kier Eagan
+Be ever merry. | Kier Eagan
+When you can visit a place freely, it loses its power over you. | Harmony Cobel
+Praise Kier. | Lumon Industries
+Your outie is a wonderful person. You should be proud. | Lumon Industries
