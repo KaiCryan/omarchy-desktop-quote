@@ -25,7 +25,7 @@ extra daemon.
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/kaicryan/omarchy-desktop-quote
+omarchy plugin add https://github.com/KaiCryan/omarchy-desktop-quote
 omarchy plugin enable kaicryan.desktop-quote
 ```
 

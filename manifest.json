@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "author": "kaicryan",
   "description": "A Variety-style quote overlay for the Omarchy desktop. Draws a rotating quote (from a plain-text file you control) on top of the wallpaper, re-rolling on a timer and whenever the wallpaper changes.",
-  "homepage": "https://github.com/kaicryan/omarchy-desktop-quote",
+  "homepage": "https://github.com/KaiCryan/omarchy-desktop-quote",
   "kinds": ["service"],
   "keepLoaded": true,
   "entryPoints": { "service": "Service.qml" }
