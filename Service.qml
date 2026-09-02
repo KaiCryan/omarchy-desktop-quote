@@ -175,10 +175,13 @@ Item {
       WlrLayershell.layer: root.layerName === "top" ? WlrLayer.Top : WlrLayer.Bottom
       WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
-      Row {
+      Column {
         id: placard
-        spacing: Math.round(18 * root.fontScale)
-        layoutDirection: root.hAlign === "right" ? Qt.RightToLeft : Qt.LeftToRight
+        width: root.maxWidth
+        spacing: Math.round(11 * root.fontScale)
+
+        readonly property int textAlign: root.hAlign === "right" ? Text.AlignRight
+          : root.hAlign === "center" ? Text.AlignHCenter : Text.AlignLeft
 
         anchors.left: root.hAlign === "left" ? parent.left : undefined
         anchors.leftMargin: root.marginX
@@ -206,45 +209,46 @@ Item {
           blurMax: 24
         }
 
-        Rectangle {
-          width: Math.max(2, Math.round(3 * root.fontScale))
-          height: col.implicitHeight
-          anchors.verticalCenter: parent.verticalCenter
-          color: Color.accent
-          opacity: 0.85
+        // A short accent tick above the quote, on its leading edge — reads at any
+        // position, unlike an edge-hugging vertical bar.
+        Item {
+          width: parent.width
+          height: Math.max(2, Math.round(3 * root.fontScale))
+          Rectangle {
+            width: Math.round(54 * root.fontScale)
+            height: parent.height
+            color: Color.accent
+            opacity: 0.9
+            anchors.left: root.hAlign === "left" ? parent.left : undefined
+            anchors.right: root.hAlign === "right" ? parent.right : undefined
+            anchors.horizontalCenter: root.hAlign === "center" ? parent.horizontalCenter : undefined
+          }
         }
 
-        Column {
-          id: col
-          spacing: Math.round(8 * root.fontScale)
+        Text {
+          width: parent.width
+          horizontalAlignment: placard.textAlign
+          text: root.quoteText
+          wrapMode: Text.WordWrap
+          color: Color.foreground
+          font.family: Style.font.family
+          font.pixelSize: Math.round(22 * root.fontScale)
+          font.weight: Font.Light
+          style: Text.Outline
+          styleColor: Qt.rgba(0, 0, 0, 0.5)
+        }
 
-          Text {
-            width: root.maxWidth
-            horizontalAlignment: root.hAlign === "right" ? Text.AlignRight
-              : root.hAlign === "center" ? Text.AlignHCenter : Text.AlignLeft
-            text: root.quoteText
-            wrapMode: Text.WordWrap
-            color: Color.foreground
-            font.family: Style.font.family
-            font.pixelSize: Math.round(22 * root.fontScale)
-            font.weight: Font.Light
-            style: Text.Outline
-            styleColor: Qt.rgba(0, 0, 0, 0.5)
-          }
-
-          Text {
-            visible: root.quoteAttr.length > 0
-            width: root.maxWidth
-            horizontalAlignment: root.hAlign === "right" ? Text.AlignRight
-              : root.hAlign === "center" ? Text.AlignHCenter : Text.AlignLeft
-            text: "— " + root.quoteAttr.toUpperCase()
-            color: Color.accent
-            font.family: Style.font.family
-            font.pixelSize: Math.round(11 * root.fontScale)
-            font.letterSpacing: 2
-            style: Text.Outline
-            styleColor: Qt.rgba(0, 0, 0, 0.45)
-          }
+        Text {
+          visible: root.quoteAttr.length > 0
+          width: parent.width
+          horizontalAlignment: placard.textAlign
+          text: root.quoteAttr.toUpperCase()
+          color: Color.accent
+          font.family: Style.font.family
+          font.pixelSize: Math.round(11 * root.fontScale)
+          font.letterSpacing: 2
+          style: Text.Outline
+          styleColor: Qt.rgba(0, 0, 0, 0.45)
         }
       }
     }
