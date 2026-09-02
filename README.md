@@ -10,6 +10,9 @@ wallpaper and quote pools completely separate.
 
 ![preview](docs/preview.jpg)
 
+<sub>Shown at the default `bottom-left` position. Nine positions and a text-size
+scale are configurable — see [Config](#config).</sub>
+
 ## Why
 
 Omarchy cycles wallpapers beautifully but has no equivalent of Variety's quote
@@ -30,7 +33,7 @@ omarchy plugin enable kaicryan.desktop-quote
 ```
 
 > Plugins run as unsandboxed code inside `omarchy-shell`. Read `Service.qml`
-> before you enable it — it's ~230 lines.
+> before you enable it — it's ~250 lines and has no network access.
 
 Update later with `omarchy plugin update kaicryan.desktop-quote`, remove with
 `omarchy plugin remove kaicryan.desktop-quote`.
