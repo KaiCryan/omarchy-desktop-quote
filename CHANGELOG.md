@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.1
+- Default `rotateMinutes` is now `30` (was `20`).
+
 ## 1.2.0
 - Accent is now a short horizontal tick above the quote (on its leading edge)
   instead of a vertical bar — the bar hugged the screen edge and looked wrong at

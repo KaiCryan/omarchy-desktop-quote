@@ -1,6 +1,6 @@
 {
   "quotesPath": "~/.config/omarchy/quotes.txt",
-  "rotateMinutes": 20,
+  "rotateMinutes": 30,
   "syncWithWallpaper": true,
   "position": "bottom-left",
   "marginX": 96,

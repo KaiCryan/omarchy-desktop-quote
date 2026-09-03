@@ -62,7 +62,7 @@ Optional — create **`~/.config/omarchy/desktop-quote.json`**
 | key | default | meaning |
 |---|---|---|
 | `quotesPath` | `~/.config/omarchy/quotes.txt` | where to read quotes from |
-| `rotateMinutes` | `20` | minutes between automatic changes |
+| `rotateMinutes` | `30` | minutes between automatic changes |
 | `syncWithWallpaper` | `true` | also change the quote when the wallpaper changes |
 | `position` | `bottom-left` | `<vertical>-<horizontal>` — vertical: `top` \| `middle` \| `bottom`, horizontal: `left` \| `center` \| `right`. e.g. `middle-right`, `top-center`. (`corner` still works as an alias.) |
 | `marginX` / `marginY` | `96` / `84` | distance from the screen edges, px |

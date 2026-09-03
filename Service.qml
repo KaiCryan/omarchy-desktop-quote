@@ -16,7 +16,7 @@ Item {
 
   // ---- config (all overridable in ~/.config/omarchy/desktop-quote.json) -------
   property string quotesPath: home + "/.config/omarchy/quotes.txt"
-  property int rotateMinutes: 20
+  property int rotateMinutes: 30
   property bool syncWithWallpaper: true
   // <vertical>-<horizontal>: vertical = top | middle | bottom,
   // horizontal = left | center | right  (e.g. "middle-right", "top-center")
