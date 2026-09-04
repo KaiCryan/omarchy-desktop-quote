@@ -1,5 +1,7 @@
 # Desktop Quote
 
+> Part of **[Omarchy · Lumon Industries](https://github.com/KaiCryan/omarchy-lumon)** — a whole-system _Severance_ theme for Omarchy. This repo is one piece; the hub links the rest.
+
 A **Variety-style quote overlay for [Omarchy](https://omarchy.org)**.
 
 It draws a small quote placard on your desktop — behind your windows, over the
