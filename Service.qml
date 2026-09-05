@@ -31,7 +31,10 @@ Item {
 
   readonly property var _pos: String(position || "bottom-left").toLowerCase().split("-")
   readonly property string vAlign: ["top", "middle", "bottom"].indexOf(_pos[0]) !== -1 ? _pos[0] : "bottom"
-  readonly property string hAlign: ["left", "center", "right"].indexOf(_pos[1]) !== -1 ? _pos[1] : "left"
+  readonly property bool autoHAlign: _pos[1] === "auto"
+  readonly property string hAlign: autoHAlign
+    ? detectedHAlign
+    : (["left", "center", "right"].indexOf(_pos[1]) !== -1 ? _pos[1] : "left")
 
   // ---- state ----------------------------------------------------------------
   property var quotes: []
@@ -39,6 +42,9 @@ Item {
   property string quoteAttr: ""
   property string lastWallpaper: ""
   property double lastRollAt: 0
+  // Side chosen by bin/detect-quote-side for the current wallpaper, used only
+  // when position's horizontal segment is "auto" (e.g. "middle-auto").
+  property string detectedHAlign: "right"
 
   function applyConfig(raw) {
     try {
@@ -130,9 +136,16 @@ Item {
       onStreamFinished: {
         var wp = String(text || "").trim()
         if (!wp) return
-        if (root.lastWallpaper === "") { root.lastWallpaper = wp; return }
-        if (wp !== root.lastWallpaper) {
+        var isFirst = root.lastWallpaper === ""
+        var changed = !isFirst && wp !== root.lastWallpaper
+        if (isFirst || changed) {
           root.lastWallpaper = wp
+          if (root.autoHAlign && !sideProbe.running) {
+            sideProbe.command = root.sideProbeCommand(wp)
+            sideProbe.running = true
+          }
+        }
+        if (changed) {
           // Skip if the quote was just rolled explicitly (e.g. a keybind that
           // changes wallpaper and calls `next` together) — avoids a double flip.
           if (root.syncWithWallpaper && Date.now() - root.lastRollAt > 3000) root.roll()
@@ -142,9 +155,25 @@ Item {
   }
   Timer {
     interval: 2500
-    running: root.syncWithWallpaper
+    running: root.syncWithWallpaper || root.autoHAlign
     repeat: true; triggeredOnStart: true
     onTriggered: wpProbe.running = true
+  }
+
+  // Which side has more empty space for the placard, for `position: "<v>-auto"`.
+  // Re-run whenever the wallpaper changes (driven by wpProbe above).
+  function sideProbeCommand(wallpaperPath) {
+    return ["bash", root.pluginDir + "bin/detect-quote-side", wallpaperPath,
+            String(root.marginX), String(root.marginY), String(root.maxWidth), root.vAlign]
+  }
+  Process {
+    id: sideProbe
+    stdout: StdioCollector {
+      onStreamFinished: {
+        var side = String(text || "").trim()
+        if (side === "left" || side === "right") root.detectedHAlign = side
+      }
+    }
   }
 
   // IPC:  omarchy-shell -q desktopQuote next | toggle | show | hide

@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Pick which horizontal side of a wallpaper has more empty space for the quote
+# placard, so `position: "<vertical>-auto"` can place text where it won't
+# fight with the image. Prints "left" or "right" to stdout, always — never
+# errors out, so a broken image or a missing `magick` just falls back.
+#
+#   detect-quote-side <image> <marginX> <marginY> <maxWidth> <vAlign>
+#
+# Method: crop the actual candidate placard rectangle on each side (same
+# geometry Service.qml would place it at) and compare grayscale standard
+# deviation. Lower = flatter/less busy = better for text to sit on.
+set -euo pipefail
+
+IMG=${1:-}
+MARGIN_X=${2:-96}
+MARGIN_Y=${3:-84}
+MAX_WIDTH=${4:-720}
+VALIGN=${5:-bottom}
+FALLBACK=right
+
+command -v magick >/dev/null 2>&1 || { echo "$FALLBACK"; exit 0; }
+[[ -n "$IMG" && -f "$IMG" ]] || { echo "$FALLBACK"; exit 0; }
+
+# `read` returns non-zero on a line with no trailing newline, which
+# `-format` output never has — force one so a successful read doesn't
+# look like EOF-without-a-line and fall through to the fallback.
+read -r W H < <(magick identify -format '%w %h\n' "$IMG[0]" 2>/dev/null) || true
+[[ -n "${W:-}" && -n "${H:-}" ]] || { echo "$FALLBACK"; exit 0; }
+
+# Candidate placard box: same width Service.qml would wrap text to, a band
+# tall enough for a few lines, positioned per vAlign like the real thing.
+RW=$MAX_WIDTH
+(( RW > W / 2 )) && RW=$(( W / 2 - MARGIN_X ))
+(( RW < 40 )) && RW=40
+
+BAND_H=$(( H * 3 / 10 ))
+case "$VALIGN" in
+  top)    RY=$MARGIN_Y ;;
+  bottom) RY=$(( H - MARGIN_Y - BAND_H )); (( RY < 0 )) && RY=0 ;;
+  *)      RY=$(( (H - BAND_H) / 2 )) ;;
+esac
+
+LX=$MARGIN_X
+RX=$(( W - MARGIN_X - RW ))
+(( LX < 0 )) && LX=0
+(( RX < 0 )) && RX=0
+
+score() {
+  magick "$IMG[0]" -crop "${RW}x${BAND_H}+${1}+${RY}" +repage \
+    -colorspace Gray -format '%[fx:standard_deviation]' info: 2>/dev/null
+}
+
+LEFT_SCORE=$(score "$LX") || { echo "$FALLBACK"; exit 0; }
+RIGHT_SCORE=$(score "$RX") || { echo "$FALLBACK"; exit 0; }
+
+awk -v l="$LEFT_SCORE" -v r="$RIGHT_SCORE" \
+  'BEGIN { print (l <= r) ? "left" : "right" }'

@@ -23,7 +23,9 @@ extra daemon.
 ## Requirements
 
 - Omarchy with the Quickshell-based shell (`omarchy-shell`) — i.e. current
-  Omarchy. No other dependencies.
+  Omarchy. No other dependencies, unless you use `position: "<vertical>-auto"`
+  (see [below](#auto-side-position-vertical-auto)), which shells out to
+  ImageMagick (`magick`).
 
 ## Install
 
@@ -64,12 +66,22 @@ Optional — create **`~/.config/omarchy/desktop-quote.json`**
 | `quotesPath` | `~/.config/omarchy/quotes.txt` | where to read quotes from |
 | `rotateMinutes` | `30` | minutes between automatic changes |
 | `syncWithWallpaper` | `true` | also change the quote when the wallpaper changes |
-| `position` | `bottom-left` | `<vertical>-<horizontal>` — vertical: `top` \| `middle` \| `bottom`, horizontal: `left` \| `center` \| `right`. e.g. `middle-right`, `top-center`. (`corner` still works as an alias.) |
+| `position` | `bottom-left` | `<vertical>-<horizontal>` — vertical: `top` \| `middle` \| `bottom`, horizontal: `left` \| `center` \| `right` \| `auto`. e.g. `middle-right`, `top-center`, `middle-auto`. (`corner` still works as an alias.) |
 | `marginX` / `marginY` | `96` / `84` | distance from the screen edges, px |
 | `maxWidth` | `720` | wrap width of the quote, px |
 | `fontScale` | `1.0` | multiplier on the text size |
 | `layer` | `bottom` | `bottom` = on the desktop (behind windows) · `top` = floats over windows |
 | `dim` | `0.92` | overall opacity, `0`–`1` |
+
+### Auto side (`position: "<vertical>-auto"`)
+
+With the horizontal segment set to `auto` (e.g. `middle-auto`), the plugin picks
+left or right per wallpaper instead of a fixed side: it crops the actual
+candidate placard rectangle on each edge and compares grayscale variance —
+lower variance (flatter, less busy) wins. Re-evaluated every time the
+wallpaper changes, via [`bin/detect-quote-side`](bin/detect-quote-side).
+Requires `magick` (ImageMagick) on `PATH`; without it, `auto` just falls back
+to the right.
 
 ## Commands
 

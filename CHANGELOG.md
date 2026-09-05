@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+- `position` accepts `auto` as the horizontal segment (e.g. `middle-auto`):
+  picks whichever side of the current wallpaper has more empty space for the
+  placard, re-evaluated on every wallpaper change. New `bin/detect-quote-side`
+  helper (shells out to ImageMagick; falls back to the right without it).
+
 ## 1.2.1
 - Default `rotateMinutes` is now `30` (was `20`).
 
