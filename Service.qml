@@ -238,23 +238,22 @@ Item {
           blurMax: 24
         }
 
-        // A short accent tick above the quote, on its leading edge — reads at any
-        // position, unlike an edge-hugging vertical bar.
-        Item {
-          width: parent.width
+        // A short accent tick above the quote, on its leading edge — sized to
+        // the quote's own rendered width (not a fixed length), so it reads as
+        // an underline for *this* text rather than a bar of arbitrary length.
+        Rectangle {
+          readonly property int tickWidth: Math.max(24, Math.min(Math.round(quoteLine.paintedWidth), placard.width))
+          x: root.hAlign === "right" ? placard.width - tickWidth
+            : root.hAlign === "center" ? Math.round((placard.width - tickWidth) / 2)
+            : 0
+          width: tickWidth
           height: Math.max(2, Math.round(3 * root.fontScale))
-          Rectangle {
-            width: Math.round(54 * root.fontScale)
-            height: parent.height
-            color: Color.accent
-            opacity: 0.9
-            anchors.left: root.hAlign === "left" ? parent.left : undefined
-            anchors.right: root.hAlign === "right" ? parent.right : undefined
-            anchors.horizontalCenter: root.hAlign === "center" ? parent.horizontalCenter : undefined
-          }
+          color: Color.accent
+          opacity: 0.9
         }
 
         Text {
+          id: quoteLine
           width: parent.width
           horizontalAlignment: placard.textAlign
           text: root.quoteText

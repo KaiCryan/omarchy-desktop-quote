@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+- Fix the accent tick rendering far wider than intended (it was meant to be a
+  short ~54px mark but could stretch to the full placard width). It's now
+  sized to the quote's own rendered text width instead of a fixed length.
+
 ## 1.3.0
 - `position` accepts `auto` as the horizontal segment (e.g. `middle-auto`):
   picks whichever side of the current wallpaper has more empty space for the
