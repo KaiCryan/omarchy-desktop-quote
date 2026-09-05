@@ -39,6 +39,14 @@ wallpaper and quote pools completely separate.
 <sub>Shown at the default `bottom-left` position. Nine positions and a text-size
 scale are configurable — see [Config](#config).</sub>
 
+<p float="left">
+  <img src="docs/example-ascii-portrait.png" width="49%" alt="Quote placard over an ASCII-art portrait wallpaper, bottom-right position" />
+  <img src="docs/example-milchick.png" width="49%" alt="Quote placard over a Severance still, middle-left position" />
+</p>
+
+<sub>Same overlay, different wallpapers and positions — it restyles with
+whatever's underneath.</sub>
+
 ## Why
 
 Omarchy cycles wallpapers beautifully but has no equivalent of Variety's quote
