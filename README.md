@@ -1,4 +1,30 @@
 # Desktop Quote
+<!-- lumon-voice:head -->
+```
+░▒▓█  L U M O N   I N D U S T R I E S  █▓▒░
+```
+> *One thought, placed upon the desktop, and refreshed before it wearies.*
+<!-- /lumon-voice:head -->
+
+<!-- lumon-set:start -->
+> **Part of [Omarchy · Lumon Industries](https://github.com/KaiCryan/omarchy-lumon)** — a whole-system *Severance* theme for Omarchy.
+
+<details><summary><strong>The full set</strong></summary>
+
+| Repo | |
+|---|---|
+| [omarchy-lumon](https://github.com/KaiCryan/omarchy-lumon) | **the hub** — install everything, screenshots, the whole pitch |
+| [omarchy-lumon-boot](https://github.com/KaiCryan/omarchy-lumon-boot) | Plymouth boot splash — Lumon globe, matching LUKS prompt |
+| [omarchy-lumon-lock](https://github.com/KaiCryan/omarchy-lumon-lock) | lock screen — prompts *“Enter your access code”* |
+| [omarchy-lumon-greeting](https://github.com/KaiCryan/omarchy-lumon-greeting) | terminal greeting — 19 animations, then `fastfetch` |
+| [omarchy-lumon-wallpapers](https://github.com/KaiCryan/omarchy-lumon-wallpapers) | ASCII crew portraits + 4K brand set, hourly cycler |
+| [omarchy-lumon-screensaver](https://github.com/KaiCryan/omarchy-lumon-screensaver) | capped-fps `ttfx` effects + an ambient scene reel |
+| [omarchy-lumon-theme](https://github.com/KaiCryan/omarchy-lumon-theme) | colour scheme, Hyprland look’n’feel, `fastfetch` + about branding |
+| **omarchy-desktop-quote** | a rotating quote placard over the wallpaper &nbsp;·&nbsp; ← you are here |
+| [omarchy-lumon-assets](https://github.com/KaiCryan/omarchy-lumon-assets) | shared ASCII art, fonts and build tools |
+
+</details>
+<!-- lumon-set:end -->
 
 A **Variety-style quote overlay for [Omarchy](https://omarchy.org)**.
 
@@ -121,3 +147,14 @@ instant. The plugin de-bounces so it only changes once.
 
 MIT © kaicryan. The bundled fallback quotes are lines from *Severance*
 (Apple TV+) — included as example content for personal use only.
+
+---
+
+<div align="center"><sub>
+
+*The work is mysterious and important.*
+
+Part of [Omarchy · Lumon Industries](https://github.com/KaiCryan/omarchy-lumon) · a personal, non-commercial *Severance* tribute · not affiliated with Apple TV+
+
+</sub></div>
+<!-- lumon-voice:footer -->
